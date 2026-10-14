@@ -1,0 +1,25 @@
+name: my_animeapp
+description: Kerangka UI (skeleton) aplikasi katalog anime — dummy only, tanpa backend/API.
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.4.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Routing deklaratif + bottom-nav shell
+  go_router: ^14.2.0
+  # Kerangka state management (belum ada logika bisnis)
+  flutter_riverpod: ^2.5.1
+  # Tipografi Material 3 (opsional, hapus jika mau 100% default)
+  google_fonts: ^6.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true

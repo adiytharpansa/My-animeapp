@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Anime App — Skeleton UI</title>
+<style>
+  :root{
+    --bg:#0f1117; --surface:#171b26; --surface2:#1f2536; --text:#f2f4fa;
+    --muted:#9aa3b8; --primary:#7c5cff; --primary2:#a78bff; --accent:#ff5c8a;
+    --card-radius:18px; --max:1180px;
+  }
+  [data-theme="light"]{
+    --bg:#f5f6fb; --surface:#ffffff; --surface2:#eef0f7; --text:#141824;
+    --muted:#5d667d; --primary:#6a4dff; --primary2:#8a6fff; --accent:#e83e6b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    min-height:100vh; display:flex; flex-direction:column;
+  }
+  /* Splash */
+  #splash{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
+    flex-direction:column;gap:14px;background:radial-gradient(900px 500px at 20% 10%,#7c5cff33,transparent),
+    radial-gradient(800px 500px at 90% 20%,#ff5c8a2e,transparent),var(--bg);
+    transition:opacity .45s ease, visibility .45s;}
+  #splash.hide{opacity:0;visibility:hidden}
+  .logo{width:84px;height:84px;border-radius:26px;display:grid;place-items:center;font-size:44px;
+    background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:0 18px 50px #7c5cff55}
+  .splash-title{font-size:26px;font-weight:800;letter-spacing:.2px}
+  .splash-sub{color:var(--muted);font-size:14px}
+  .loader{width:180px;height:6px;border-radius:99px;background:var(--surface2);overflow:hidden}
+  .loader>div{height:100%;width:40%;border-radius:99px;background:linear-gradient(90deg,var(--primary),var(--accent));
+    animation:slide 1s infinite ease-in-out}
+  @keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(280%)}}
+  /* Top bar */
+  header{position:sticky;top:0;z-index:10;backdrop-filter:blur(14px);
+    background:color-mix(in srgb, var(--bg) 82%, transparent);border-bottom:1px solid #ffffff14}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 20px;width:100%}
+  .top{display:flex;align-items:center;gap:14px;padding:14px 0}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px}
+  .brand-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:22px;
+    background:linear-gradient(135deg,var(--primary),var(--accent))}
+  nav.tabs{display:flex;gap:6px;margin-left:8px}
+  nav.tabs button{border:0;background:transparent;color:var(--muted);font-weight:700;font-size:14px;
+    padding:9px 14px;border-radius:99px;cursor:pointer}
+  nav.tabs button.active{background:var(--surface2);color:var(--text)}
+  .spacer{flex:1}
+  .search{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid #ffffff17;
+    border-radius:99px;padding:9px 14px;min-width:220px}
+  .search input{border:0;outline:0;background:transparent;color:var(--text);width:100%;font-size:14px}
+  .icon-btn{border:1px solid #ffffff1c;background:var(--surface);color:var(--text);border-radius:99px;
+    padding:9px 13px;cursor:pointer;font-size:14px;font-weight:700}
+  /* Hero */
+  .hero{margin:22px auto 6px;display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:stretch}
+  .hero-card{border-radius:24px;padding:28px;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#7c5cff,#ff5c8a 70%,#ff9a5c);color:#fff;min-height:230px;
+    display:flex;flex-direction:column;justify-content:flex-end}
+  .hero-card::after{content:"";position:absolute;inset:0;
+    background:radial-gradient(500px 260px at 80% 10%,#ffffff55,transparent 60%)}
+  .hero-card h1{margin:0 0 8px;font-size:clamp(26px,4vw,42px);line-height:1.05;position:relative;z-index:1}
+  .hero-card p{margin:0 0 16px;opacity:.92;max-width:46ch;position:relative;z-index:1}
+  .hero-actions{display:flex;gap:10px;position:relative;z-index:1;flex-wrap:wrap}
+  .btn{border:0;border-radius:99px;padding:12px 20px;font-weight:800;cursor:pointer;font-size:14px}
+  .btn-light{background:#fff;color:#191232}
+  .btn-ghost{background:#ffffff2b;color:#fff;border:1px solid #ffffff55}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .stat{background:var(--surface);border:1px solid #ffffff12;border-radius:18px;padding:16px}
+  .stat b{font-size:22px;display:block}
+  .stat span{color:var(--muted);font-size:13px}
+  /* Section */
+  main{flex:1}
+  .section-head{display:flex;align-items:center;gap:12px;margin:26px 0 14px}
+  .section-head h2{margin:0;font-size:20px}
+  .pill{font-size:12px;font-weight:800;color:var(--primary2);background:#7c5cff1c;
+    border:1px solid #7c5cff44;padding:5px 11px;border-radius:99px}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .card{background:var(--surface);border:1px solid #ffffff10;border-radius:var(--card-radius);
+    overflow:hidden;display:flex;flex-direction:column;min-width:0}
+  .poster{aspect-ratio:16/10;display:grid;place-items:center;font-size:52px;position:relative}
+  .poster .badge{position:absolute;top:10px;left:10px;background:#00000088;color:#fff;font-size:12px;
+    font-weight:800;padding:5px 10px;border-radius:99px;backdrop-filter:blur(6px)}
+  .fav{position:absolute;top:8px;right:8px;border:0;border-radius:99px;width:36px;height:36px;
+    font-size:17px;cursor:pointer;background:#00000077;color:#fff}
+  .fav.on{background:var(--accent)}
+  .card-body{padding:13px 14px 15px;display:flex;flex-direction:column;gap:6px}
+  .card-body h3{margin:0;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .meta{color:var(--muted);font-size:12.5px;display:flex;gap:8px;flex-wrap:wrap}
+  .stars{color:#ffc94d;font-size:13px;font-weight:800}
+  .card-body button{margin-top:8px;border:0;border-radius:12px;padding:10px;font-weight:800;cursor:pointer;
+    background:var(--surface2);color:var(--text)}
+  .card-body button:hover{background:var(--primary);color:#fff}
+  /* Detail dialog */
+  dialog{background:var(--surface);color:var(--text);border:1px solid #ffffff1c;border-radius:20px;
+    max-width:560px;width:calc(100vw - 40px);padding:0;overflow:hidden}
+  dialog::backdrop{background:#000000aa;backdrop-filter:blur(4px)}
+  .dlg-poster{height:190px;display:grid;place-items:center;font-size:72px}
+  .dlg-body{padding:20px 22px 24px}
+  .dlg-body h3{margin:0 0 6px;font-size:22px}
+  /* Bottom nav (mobile) */
+  .bottom{position:sticky;bottom:0;z-index:10;background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(14px);border-top:1px solid #ffffff14;display:none}
+  .bottom-inner{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);
+    padding:8px 10px calc(10px + env(safe-area-inset-bottom))}
+  .bottom button{border:0;background:transparent;color:var(--muted);font-size:11px;font-weight:800;
+    display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px;cursor:pointer}
+  .bottom button.active{color:var(--primary2)}
+  .bottom .ico{font-size:20px}
+  footer{color:var(--muted);font-size:12.5px;padding:26px 0 90px;text-align:center}
+  @media (max-width:960px){
+    .hero{grid-template-columns:1fr}
+    .grid{grid-template-columns:repeat(3,1fr)}
+    nav.tabs{display:none}
+    .bottom{display:block}
+  }
+  @media (max-width:640px){
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .search{min-width:0;flex:1}
+    .stats{grid-template-columns:repeat(3,1fr)}
+  }
+</style>
+</head>
+<body>
+<div id="splash" aria-hidden="true">
+  <div class="logo">⛩️</div>
+  <div class="splash-title">My Anime App</div>
+  <div class="splash-sub">Skeleton UI • dummy data • tanpa backend</div>
+  <div class="loader"><div></div></div>
+</div>
+
+<header>
+  <div class="wrap top">
+    <div class="brand"><span class="brand-mark">🎌</span> MyAnime</div>
+    <nav class="tabs" id="tabs">
+      <button class="active" data-tab="home">Home</button>
+      <button data-tab="search">Pencarian</button>
+      <button data-tab="fav">Favorit</button>
+      <button data-tab="profile">Profil</button>
+    </nav>
+    <div class="spacer"></div>
+    <label class="search">🔎 <input id="q" type="search" placeholder="Cari anime…" aria-label="Cari anime" /></label>
+    <button class="icon-btn" id="themeBtn" title="Ganti tema">🌙</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="hero-card">
+      <h1>Nonton &amp; kelola anime favoritmu.</h1>
+      <p>Kerangka UI Flutter-style: splash, home, detail, pencarian, favorit, profil — semua data dummy, siap disambung ke API.</p>
+      <div class="hero-actions">
+        <button class="btn btn-light" onclick="document.getElementById('trending').scrollIntoView({behavior:'smooth'})">▶ Jelajahi</button>
+        <button class="btn btn-ghost" onclick="alert('Skeleton: belum ada logika bisnis')">＋ Watchlist</button>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>12</b><span>Anime dummy</span></div>
+      <div class="stat"><b>4</b><span>Tab navigasi</span></div>
+      <div class="stat"><b>100%</b><span>Responsif</span></div>
+    </div>
+  </section>
+
+  <div class="section-head">
+    <h2 id="trending">🔥 Trending Sekarang</h2>
+    <span class="pill">DUMMY</span>
+    <div class="spacer" style="flex:1"></div>
+    <span id="count" style="color:var(--muted);font-size:13px"></span>
+  </div>
+  <section class="grid" id="grid" aria-live="polite"></section>
+
+  <div class="section-head"><h2>⚙️ Pengaturan Skeleton</h2></div>
+  <section class="grid" style="grid-template-columns:repeat(2,1fr)" id="settingsGrid">
+    <div class="card"><div class="card-body">
+      <h3>🎨 Tema Light / Dark</h3>
+      <div class="meta">Terpusat ala lib/core/theme</div>
+      <button onclick="toggleTheme()">Ganti tema</button>
+    </div></div>
+    <div class="card"><div class="card-body">
+      <h3>🧭 Routing go_router</h3>
+      <div class="meta">/splash /home /detail /search /profile</div>
+      <button onclick="alert('Skeleton route: /detail/:id')">Buka contoh route</button>
+    </div></div>
+  </section>
+  <footer>© 2026 MyAnime skeleton • Material 3 • Riverpod-ready • const widgets • dibuat sebagai static preview</footer>
+</main>
+
+<nav class="bottom"><div class="bottom-inner" id="bottomNav">
+  <button class="active" data-tab="home"><span class="ico">🏠</span>Home</button>
+  <button data-tab="search"><span class="ico">🔎</span>Cari</button>
+  <button data-tab="fav"><span class="ico">❤️</span>Favorit</button>
+  <button data-tab="profile"><span class="ico">👤</span>Profil</button>
+</div></nav>
+
+<dialog id="dlg"><div class="dlg-poster" id="dlgPoster">🎬</div><div class="dlg-body">
+  <h3 id="dlgTitle">Judul</h3><div class="meta" id="dlgMeta"></div>
+  <p id="dlgDesc" style="color:var(--muted)"></p>
+  <div style="display:flex;gap:10px"><button class="btn btn-light" style="background:var(--primary);color:#fff" onclick="document.getElementById('dlg').close()">Tutup</button></div>
+</div></dialog>
+
+<script>
+const DATA=[
+ ["Neon Ronin",2026,"Action • 24 eps",9.1,"🥷","linear-gradient(135deg,#7c5cff,#00d4ff)"],
+ ["Sky Bakery",2025,"Slice of Life • 12 eps",8.4,"🍰","linear-gradient(135deg,#ff9a5c,#ff5c8a)"],
+ ["Mecha Heart",2024,"Sci-Fi • 26 eps",8.9,"🤖","linear-gradient(135deg,#334155,#7c5cff)"],
+ ["Forest Whisper",2026,"Fantasy • 13 eps",8.7,"🌲","linear-gradient(135deg,#16a34a,#84cc16)"],
+ ["Idol Eclipse",2025,"Music • 12 eps",8.2,"🎤","linear-gradient(135deg,#e83e6b,#7c5cff)"],
+ ["Ramen Quest",2023,"Comedy • 24 eps",8.0,"🍜","linear-gradient(135deg,#f59e0b,#ef4444)"],
+ ["Silent Tide",2026,"Drama • 11 eps",9.3,"🌊","linear-gradient(135deg,#0ea5e9,#1e3a8a)"],
+ ["Pixel Samurai",2024,"Game • 12 eps",8.5,"👾","linear-gradient(135deg,#8b5cf6,#ec4899)"],
+ ["Moon Courier",2025,"Adventure • 24 eps",8.8,"🌙","linear-gradient(135deg,#1f2937,#f59e0b)"],
+ ["Cat Shrine",2026,"Comedy • 12 eps",8.1,"🐱","linear-gradient(135deg,#fb7185,#fbbf24)"],
+ ["Iron Petal",2023,"Romance • 13 eps",8.6,"🌸","linear-gradient(135deg,#f472b6,#7c5cff)"],
+ ["Void Racer",2026,"Sports • 24 eps",9.0,"🏎️","linear-gradient(135deg,#111827,#ef4444)"]];
+const favs=new Set([0,6]);
+const grid=document.getElementById('grid'), q=document.getElementById('q'), count=document.getElementById('count');
+function render(filter=""){
+  const f=filter.trim().toLowerCase();
+  const list=DATA.map((d,i)=>({d0:d[0],y:d[1],g:d[2],s:d[3],e:d[4],bg:d[5],i}))
+    .filter(a=>!f||a.d0.toLowerCase().includes(f));
+  count.textContent=list.length+" judul (dummy)";
+  grid.innerHTML=list.map(a=>`
+   <article class="card">
+    <div class="poster" style="background:${a.bg}"><span>${a.e}</span>
+     <span class="badge">★ ${a.s}</span>
+     <button class="fav ${favs.has(a.i)?'on':''}" onclick="toggleFav(${a.i},this)" aria-label="favorit">♥</button>
+    </div>
+    <div class="card-body"><h3>${a.d0}</h3>
+     <div class="meta"><span>${a.y}</span><span>${a.g}</span></div>
+     <div class="stars">★★★★★ <span style="color:var(--muted)">${a.s}/10</span></div>
+     <button onclick='openDetail(${a.i})'>Lihat Detail</button>
+    </div></article>`).join('') || `<p style="color:var(--muted)">Tidak ada hasil untuk “${filter}”.</p>`;
+}
+function toggleFav(i,btn){favs.has(i)?favs.delete(i):favs.add(i);btn.classList.toggle('on');}
+function openDetail(i){const d=DATA[i];
+ document.getElementById('dlgPoster').style.background=d[5];
+ document.getElementById('dlgPoster').textContent=d[4];
+ document.getElementById('dlgTitle').textContent=d[0];
+ document.getElementById('dlgMeta').textContent=`${d[1]} • ${d[2]} • ★ ${d[3]}`;
+ document.getElementById('dlgDesc').textContent="Halaman detail skeleton: sinopsis dummy, episode dummy, tombol favorit dummy. Siap diganti Riverpod + go_router di Flutter.";
+ document.getElementById('dlg').showModal();}
+function toggleTheme(){const h=document.documentElement;
+ h.dataset.theme=h.dataset.theme==="dark"?"light":"dark";
+ document.getElementById('themeBtn').textContent=h.dataset.theme==="dark"?"🌙":"☀️";}
+document.getElementById('themeBtn').onclick=toggleTheme;
+q.addEventListener('input',e=>render(e.target.value));
+document.querySelectorAll('#tabs button,#bottomNav button').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('#tabs button,#bottomNav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===b.dataset.tab));
+ if(b.dataset.tab==="fav"){q.value="";render("");alert("Tab Favorit (skeleton): "+favs.size+" favorit dummy");}
+ if(b.dataset.tab==="search"){document.getElementById('q').focus();}
+ if(b.dataset.tab==="profile"){alert("Tab Profil (skeleton): belum ada auth/backend.");}
+ if(b.dataset.tab==="home"){q.value="";render("");window.scrollTo({top:0,behavior:'smooth'});}});
+render("");
+setTimeout(()=>document.getElementById('splash').classList.add('hide'),900);
+window.addEventListener('load',()=>setTimeout(()=>document.getElementById('splash').classList.add('hide'),900));
+</script>
+</body>
+</html>
